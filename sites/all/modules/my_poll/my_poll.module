@@ -1,0 +1,114 @@
+<?php
+function my_poll_menu() {
+    $items['my_poll'] = array(
+        'title' => "What is your FAVORITE pizza topping?!",
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('my_poll_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['my_poll_success_page'] = array(
+        'title' => 'Success',
+        'page callback' => 'my_poll_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+function my_poll_form() {
+    $options = array('Cheese' => 'Cheese', 'Olives' => 'Olives', 'Sun Dried Tomato' => 'Sun Dried Tomato', 'Goat Cheese' => 'Goat Cheese', 'Asparagus' => 'Asparagus', 'Bacon' => 'Bacon');
+    $state_array = array(
+        "Please choose a state" => "Please choose a state",
+        "ALABAMA" => "AL",
+        "ALASKA" => "AK",
+        "ARIZONA" => "AZ",
+        "ARKANSAS" => "AR",
+        "CALIFORNIA" => "CA",
+        "COLORADO" => "CO",
+        "CONNECTICUT" => "CT",
+        "DELAWARE" => "DE",
+        "FLORIDA" => "FL",
+        "GEORGIA" => "GA",
+        "HAWAII" => "HI",
+        "IDAHO" => "ID",
+        "ILLINOIS" => "IL",
+        "INDIANA" => "IN",
+        "IOWA" => "IA",
+        "KANSAS" => "KS",
+        "KENTUCKY" => "KY",
+        "LOUISIANA" => "LA",
+        "MAINE" => "ME",
+        "MARYLAND" => "MD",
+        "MASSACHUSETTS" => "MA",
+        "MICHIGAN" => "MI",
+        "MINNESOTA" => "MN",
+        "MISSISSIPPI" => "MS",
+        "MISSOURI" => "MO",
+        "MONTANA" => "MT",
+        "NEBRASKA" => "NE",
+        "NEVADA" => "NV",
+        "NEW HAMPSHIRE" => "NH",
+        "NEW JERSEY" => "NJ",
+        "NEW MEXICO" => "NM",
+        "NEW YORK" => "NY",
+        "NORTH CAROLINA" => "NC",
+        "NORTH DAKOTA" => "ND",
+        "OHIO" => "OH",
+        "OKLAHOMA" => "OK",
+        "OREGON" => "OR",
+        "PENNSYLVANIA" => "PA",
+        "RHODE ISLAND" => "RI",
+        "SOUTH CAROLINA" => "SC",
+        "SOUTH DAKOTA" => "SD",
+        "TENNESSEE" => "TN",
+        "TEXAS" => "TX",
+        "UTAH" => "UT",
+        "VERMONT" => "VT",
+        "VIRGINIA" => "VA",
+        "WASHINGTON" => "WA",
+        "WEST VIRGINIA" => "WV",
+        "WISCONSIN" => "WI",
+        "WYOMING" => "WY"
+    );
+
+    $form['toppings'] = array(
+        '#title' => t("Pizza Toppings"),
+        '#type' => 'select',
+        '#options' => $options,
+        '#default_value' => 'Cheese',
+        '#required' => TRUE,
+    );
+
+    $form['state'] = array(
+        '#title' => t("State"),
+        '#type' => 'select',
+        '#options' => $state_array,
+        '#default_value' => 'Please choose a state',
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' =>'submit',
+        '#value' => 'Submit',
+    );
+    return $form;
+}
+
+
+function my_poll_form_submit($form, &$form_state) {
+    $topping = $form_state['values']['toppings'];
+    $state = $form_state['values']['state'];
+    $result = "";
+
+    if ($state == "Please choose a state") {
+        drupal_set_message("'$state' is not a real state. Please choose a 100% real American state", $type = 'warning');
+    } else {
+        $result = "Thank you for submitting your opinion. Your favorite topping is $topping, and you hail from the magical state of $state.";
+        $form_state['redirect'] = 'my_poll_success_page';
+    }
+    $_SESSION['result'] = $result;
+}
+
+function my_poll_success() {
+    return $_SESSION['result'];
+}

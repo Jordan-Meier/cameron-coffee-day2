@@ -1,0 +1,5 @@
+name = Pizza Poll
+description = A poll about user's favorite pizza toppings
+package = Epicodus Examples
+core = 7.x
+files[] = my_poll.module
