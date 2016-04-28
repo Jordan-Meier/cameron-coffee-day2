@@ -20,21 +20,29 @@ function queen_attack_form() {
         '#title' => "User X Coordinate",
         '#type' => 'textfield',
         '#description' => t('Enter X coordinate.'),
+        '#element_validate' => array('element_validate_integer_positive', 'queen_attack_element_validate_range'),
+        '#required' => TRUE,
     );
     $form['user_ycoordinate'] = array(
         '#title' => "User Y Coordinate",
         '#type' => 'textfield',
         '#description' => t('Enter Y coordinate.'),
+        '#element_validate' => array('element_validate_integer_positive', 'queen_attack_element_validate_range'),
+        '#required' => TRUE,
     );
     $form['queen_xcoordinate'] = array(
         '#title' => "Queen X Coordinate",
         '#type' => 'textfield',
         '#description' => t('Enter X coordinate.'),
+        '#element_validate' => array('element_validate_integer_positive', 'queen_attack_element_validate_range'),
+        '#required' => TRUE,
     );
     $form['queen_ycoordinate'] = array(
         '#title' => "Queen Y Coordinate",
         '#type' => 'textfield',
         '#description' => t('Enter Y coordinate.'),
+        '#element_validate' => array('element_validate_integer_positive', 'queen_attack_element_validate_range'),
+        '#required' => TRUE,
     );
     $form['submit'] = array(
         '#type' =>'submit',
@@ -43,19 +51,31 @@ function queen_attack_form() {
     return $form;
 }
 
+function queen_attack_element_validate_range($element) {
+    if($element['#value'] < 1 || $element['#value'] > 10) {
+        form_error($element, t('Please enter a positive number between 1 and 10.'));
+    }
+}
+
 function queen_attack_form_submit($form, &$form_state) {
     $user_xcoordinate = $form_state['values']['user_xcoordinate'];
     $user_ycoordinate = $form_state['values']['user_ycoordinate'];
     $queen_xcoordinate = $form_state['values']['queen_xcoordinate'];
     $queen_ycoordinate = $form_state['values']['queen_ycoordinate'];
 
-    if ($user_xcoordinate == $queen_xcoordinate || $user_ycoordinate == $queen_ycoordinate || abs($user_xcoordinate - $queen_xcoordinate) == abs($user_ycoordinate - $queen_ycoordinate)) {
+    if($user_xcoordinate == $queen_xcoordinate && $user_ycoordinate == $queen_ycoordinate) {
+        $result = "";
+        drupal_set_message('Your pieces can not share the same spot on the board, brah.', $type = 'warning');
+    }
+    elseif ($user_xcoordinate == $queen_xcoordinate || $user_ycoordinate == $queen_ycoordinate || abs($user_xcoordinate - $queen_xcoordinate) == abs($user_ycoordinate - $queen_ycoordinate)) {
         $result = "Can attack!";
+        $form_state['redirect'] = 'queen_attack_success_page';
     } else {
         $result = "Can't attack!";
+        $form_state['redirect'] = 'queen_attack_success_page';
     }
     $_SESSION['result'] = $result;
-    $form_state['redirect'] = 'queen_attack_success_page';
+
 }
 
 function queen_attack_success() {
