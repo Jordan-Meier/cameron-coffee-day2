@@ -12,7 +12,7 @@ function rock_paper_scissors_menu() {
         'page callback' => 'drupal_get_form',
         'page arguments' => array('p2_rock_paper_scissors_form'),
         'access callback' => TRUE,
-        'type' => MENU_NORMAL_ITEM,
+        'type' => MENU_CALLBACK,
     );
     $items['rock_paper_scissors_success_page'] = array(
         'title' => 'Success',
