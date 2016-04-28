@@ -1,0 +1,5 @@
+name = Triangle Tracker
+description = User enters three side lengths, module tells them what kind of triangle it is.
+package = Epicodus Examples
+core = 7.x
+files[] = triangle_tracker.module
